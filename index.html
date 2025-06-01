@@ -1,77 +1,8 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>CloudSquare 프로젝트</title>
-    <link rel="stylesheet" href="./static/css/style.css">
-</head>
+<html>
+<head><title>Hello Jenkins</title></head>
 <body>
-
-<header>
-    <h1>CloudSquare 신입 프로젝트</h1>
-    <img src="./static/images/logo.png" alt="Square Logo" class="logo">
-</header>
-
-<main>
-    <h2>데이터 입력</h2>
-    <form id="data-form">
-        <label for="name">이름:</label>
-        <input type="text" id="name" name="name" required><br><br>
-        
-        <label for="date">날짜:</label>
-        <input type="date" id="date" name="date" required><br><br>
-        
-        <button type="submit">입력</button>
-    </form>
-
-    <br>
-    <button id="show-data">데이터 보기</button>
-</main>
-
-<div id="popup" style="display:none;">
-    <p id="popup-content"></p>
-    <button onclick="document.getElementById('popup').style.display='none'">닫기</button>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('data-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const name = document.getElementById('name').value;
-        const date = document.getElementById('date').value;
-
-        fetch('/api/insert/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, date })
-        })
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById('popup-content').innerHTML =
-                `입력 성공!<br>이름: ${name}<br>날짜: ${date}`;
-            document.getElementById('popup').style.display = 'block';
-        });
-    });
-
-    document.getElementById('show-data').addEventListener('click', function() {
-        fetch('/api/show/')
-        .then(res => res.json())
-        .then(result => {
-            if (result.status === "success") {
-                let content = "저장된 데이터:<br>";
-                result.data.forEach(entry => {
-                    content += `이름: ${entry.name}, 날짜: ${entry.today}<br>`;
-                });
-                document.getElementById('popup-content').innerHTML = content;
-                document.getElementById('popup').style.display = 'block';
-            } else {
-                alert("데이터 조회 실패: " + result.message);
-            }
-        });
-    });
-});
-</script>
-
+<h1>자동 배포 성공!</h1>
+<p>이 페이지는 Jenkins를 통해 배포되었습니다.</p>
 </body>
 </html>
