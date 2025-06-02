@@ -53,15 +53,14 @@ pipeline {
         message: "성공 - ${env.JOB_NAME} #${env.BUILD_NUMBER}"
        
       )
-    
+    }
     failure {
       slackSend (
         tokenCredentialId: "${SLACK_TOKEN_ID}",
         channel: "${CHANNEL_ID}",
         color: '#00FF00',
         message: "실패 - ${env.JOB_NAME} #${env.BUILD_NUMBER} \n 상세 오류 : ${env.BUILD_URL}"
-        )
-      }
+      )
     }
   }
 }
