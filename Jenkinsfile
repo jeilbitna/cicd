@@ -4,19 +4,19 @@ pipeline {
   stages {
     stage('User Check') {
       steps {
-        whoami
+        sh 'whoami'
       }
     }
 
     stage('Build Directory') {
       steps {
-        pwd
+        sh 'pwd'
       }
     }
 
     stage('Directory Info') {
       steps {
-        ls -al
+        sh 'ls -al'
       }
     }
 
