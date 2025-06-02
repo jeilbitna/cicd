@@ -22,7 +22,7 @@ pipeline {
 
     stage('Git pull') {
       steps {
-        ssh root@prod "cd /var/www/html && git pull origin main"
+        sh 'ssh root@prod "cd /var/www/html && git pull origin main"'
       }
     }
   }
