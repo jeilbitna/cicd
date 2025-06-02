@@ -14,6 +14,7 @@ pipeline {
           tokenCredentialId: "${SLACK_TOKEN_ID}",
           channel: "${CHANNEL_ID}",
           color: '#FFFF00',
+          botUser: true,
           message: "STARTED - Job : ${env.JOB_NAME}, Build : ${env.BUILD_NUMBER}"
         )
       }
@@ -50,6 +51,7 @@ pipeline {
         tokenCredentialId: "${SLACK_TOKEN_ID}",
         channel: "${CHANNEL_ID}",
         color: '#00FF00',
+        botUser: true,
         message: "성공 - ${env.JOB_NAME} #${env.BUILD_NUMBER}"
        
       )
@@ -59,6 +61,7 @@ pipeline {
         tokenCredentialId: "${SLACK_TOKEN_ID}",
         channel: "${CHANNEL_ID}",
         color: '#00FF00',
+        botUser: true,
         message: "실패 - ${env.JOB_NAME} #${env.BUILD_NUMBER} \n 상세 오류 : ${env.BUILD_URL}"
       )
     }
