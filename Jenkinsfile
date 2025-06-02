@@ -3,7 +3,7 @@ pipeline {
   
   environment {
     SLACK_TOKEN_ID = 'slack_token'
-    CHANNEL_ID = 'kjs-sxl4028'
+    CHANNEL_ID = 'notification'
   }
 
   stages {
