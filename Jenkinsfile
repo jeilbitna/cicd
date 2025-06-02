@@ -1,14 +1,20 @@
 pipeline {
   agent any
   
+  environment {
+    SLACK_TOKEN_ID = 'slack_token'
+    CHANNEL_ID = '#kjs-sxl4028'
+  }
+
   stages {
     
     stage('Start') {
       steps {
         slackSend (
-          channel: 'kjs-sxl4028',
+          tokenCredentialId: "${SLACK_TOKEN_ID}",
+          channel: "${CHANNEL_ID}",
           color: '#FFFF00',
-          message: "STARTED"
+          message: "STARTED - Job : ${env.JOB_NAME}, Build : ${env.BUILD_NUMBER}"
         )
       }
     }
@@ -37,5 +43,25 @@ pipeline {
       }
     }
   }
-}
 
+  post {
+    success {
+      slackSend (
+        tokenCredentialId: "${SLACK_TOKEN_ID}",
+        channel: "${CHANNEL_ID}",
+        color: '#00FF00',
+        message: "성공 - ${env.JOB_NAME} #${env.BUILD_NUMBER}"
+       
+      )
+    
+    failure {
+      slackSend (
+        tokenCredentialId: "${SLACK_TOKEN_ID}",
+        channel: "${CHANNEL_ID}",
+        color: '#00FF00',
+        message: "실패 - ${env.JOB_NAME} #${env.BUILD_NUMBER} \n 상세 오류 : ${env.BUILD_URL}"
+        )
+      }
+    }
+  }
+}
