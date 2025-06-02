@@ -2,6 +2,17 @@ pipeline {
   agent any
   
   stages {
+    
+    stage('Start') {
+      steps {
+        slackSend (
+          channel: 'kjs-sxl4028',
+          color: '#FFFF00',
+          message: "STARTED"
+        )
+      }
+    }
+
     stage('User Check') {
       steps {
         sh 'whoami'
@@ -27,3 +38,4 @@ pipeline {
     }
   }
 }
+
