@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Slack 배포 승인 요청') {
       steps {
-        withCredentials([String(credentialIsId: 'slack_bot_token', variables: 'SLACK_BOT_TOKEN')]) {
+        withCredentials([String(credentialsId: 'slack_bot_token', variable: 'SLACK_BOT_TOKEN')]) {
         script {
           def json = '''{
             "channel": "jenkins-deploy-bot",
