@@ -11,7 +11,7 @@ pipeline {
       steps {
         script {
           def json = '''{
-            "channel": "jenkins-alert",
+            "channel": "jenkins-deploy-bot",
             "blocks": [
               {
                 "type": "section",
@@ -27,7 +27,7 @@ pipeline {
                     "type": "button",
                     "text": {
                       "type": "plain_text",
-                      "text": "✅ 배포 승인"
+                      "text": " 배포 승인"
                     },
                     "style": "primary",
                     "value": "deploy_approval",
