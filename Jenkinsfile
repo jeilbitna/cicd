@@ -7,6 +7,48 @@ pipeline {
   }
 
   stages {
+    stage('Slack 배포 승인 요청') {
+      steps {
+        script {
+          def json = '''{
+            "channel": "jenkins-alert",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*배포 승인 요청*\\nJob: ${env.JOB_NAME}, Build: #${env.BUILD_NUMBER}"
+                }
+              },
+              {
+                "type": "actions",
+                "elements": [
+                  {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "✅ 배포 승인"
+                    },
+                    "style": "primary",
+                    "value": "deploy_approval",
+                    "action_id": "deploy_trigger"
+                  }
+                ]
+              }
+            ]
+          }'''
+
+          writeFile file: 'message.json', text: json
+
+          sh """
+          curl -X POST -H "Authorization: Bearer ${env.SLACK_BOT_TOKEN}" \\
+               -H 'Content-type: application/json' \\
+               --data @message.json \\
+               https://slack.com/api/chat.postMessage
+          """
+        }
+      }
+    }
     
     stage('Start') {
       steps {
