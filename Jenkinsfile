@@ -12,7 +12,7 @@ pipeline {
         withCredentials([string(credentialsId: 'slack_bot_token', variable: 'SLACK_BOT_TOKEN')]) {
           script {
             def json = """{
-              "channel": "jenkins-deploy-bot",
+              "channel": "jenkins-bot",
               "blocks": [
                 {
                   "type": "section",
