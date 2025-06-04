@@ -1,6 +1,6 @@
 pipeline {
   agent any
-  
+
   environment {
     SLACK_TOKEN_ID = 'slack_token'
     CHANNEL_ID = 'notification'
@@ -10,47 +10,48 @@ pipeline {
     stage('Slack 배포 승인 요청') {
       steps {
         withCredentials([string(credentialsId: 'slack_bot_token', variable: 'SLACK_BOT_TOKEN')]) {
-        script {
-          def json = '''{
-            "channel": "jenkins-deploy-bot",
-            "blocks": [
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "*배포 승인 요청*\\nJob: ${env.JOB_NAME}, Build: #${env.BUILD_NUMBER}"
-                }
-              },
-              {
-                "type": "actions",
-                "elements": [
-                  {
-                    "type": "button",
-                    "text": {
-                      "type": "plain_text",
-                      "text": " 배포 승인"
-                    },
-                    "style": "primary",
-                    "value": "deploy_approval",
-                    "action_id": "deploy_trigger"
+          script {
+            def json = """{
+              "channel": "jenkins-deploy-bot",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*배포 승인 요청*\\nJob: ${env.JOB_NAME}, Build: #${env.BUILD_NUMBER}"
                   }
-                ]
-              }
-            ]
-          }'''
-       }
-          writeFile file: 'message.json', text: json
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": " 배포 승인"
+                      },
+                      "style": "primary",
+                      "value": "deploy_approval",
+                      "action_id": "deploy_trigger"
+                    }
+                  ]
+                }
+              ]
+            }"""
 
-          sh """
-          curl -X POST -H "Authorization: Bearer ${env.SLACK_BOT_TOKEN}" \\
-               -H 'Content-type: application/json' \\
-               --data @message.json \\
-               https://slack.com/api/chat.postMessage
-          """
+            writeFile file: 'message.json', text: json
+
+            sh """
+              curl -X POST -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" \\
+                   -H 'Content-type: application/json' \\
+                   --data @message.json \\
+                   https://slack.com/api/chat.postMessage
+            """
+          }
         }
       }
     }
-    
+
     stage('Start') {
       steps {
         slackSend (
@@ -96,16 +97,15 @@ pipeline {
         color: '#00FF00',
         botUser: true,
         message: "성공 - ${env.JOB_NAME} #${env.BUILD_NUMBER}"
-       
       )
     }
     failure {
       slackSend (
         tokenCredentialId: "${SLACK_TOKEN_ID}",
         channel: "${CHANNEL_ID}",
-        color: '#00FF00',
+        color: '#FF0000',
         botUser: true,
-        message: "실패 - ${env.JOB_NAME} #${env.BUILD_NUMBER} \n 상세 오류 : ${env.BUILD_URL}"
+        message: "실패 - ${env.JOB_NAME} #${env.BUILD_NUMBER}\n상세 오류: ${env.BUILD_URL}"
       )
     }
   }
