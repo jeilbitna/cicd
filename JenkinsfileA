@@ -7,7 +7,7 @@ pipeline {
   }
 
   stages {
-    stage('Slack 배포 승인 요청') {
+    stage('Slack 메시지 전송') {
       steps {
         withCredentials([string(credentialsId: 'slack_bot_token', variable: 'SLACK_BOT_TOKEN')]) {
           script {
@@ -50,63 +50,6 @@ pipeline {
           }
         }
       }
-    }
-
-    stage('Start') {
-      steps {
-        slackSend (
-          tokenCredentialId: "${SLACK_TOKEN_ID}",
-          channel: "${CHANNEL_ID}",
-          color: '#FFFF00',
-          botUser: true,
-          message: "STARTED - Job : ${env.JOB_NAME}, Build : ${env.BUILD_NUMBER}"
-        )
-      }
-    }
-
-    stage('User Check') {
-      steps {
-        sh 'whoami'
-      }
-    }
-
-    stage('Build Directory') {
-      steps {
-        sh 'pwd'
-      }
-    }
-
-    stage('Directory Info') {
-      steps {
-        sh 'ls -al'
-      }
-    }
-
-    stage('Git pull') {
-      steps {
-        sh 'ssh root@prod "cd /var/www/html && git pull origin main"'
-      }
-    }
-  }
-
-  post {
-    success {
-      slackSend (
-        tokenCredentialId: "${SLACK_TOKEN_ID}",
-        channel: "${CHANNEL_ID}",
-        color: '#00FF00',
-        botUser: true,
-        message: "성공 - ${env.JOB_NAME} #${env.BUILD_NUMBER}"
-      )
-    }
-    failure {
-      slackSend (
-        tokenCredentialId: "${SLACK_TOKEN_ID}",
-        channel: "${CHANNEL_ID}",
-        color: '#FF0000',
-        botUser: true,
-        message: "실패 - ${env.JOB_NAME} #${env.BUILD_NUMBER}\n상세 오류: ${env.BUILD_URL}"
-      )
     }
   }
 }
